@@ -14,6 +14,8 @@
 #include <string>
 #include <queue>
 
+using namespace std;
+
 enum treetype { LEAF, ROOT, RANDOMIZED };
 
 /**
@@ -23,12 +25,62 @@ enum treetype { LEAF, ROOT, RANDOMIZED };
 *
 */
 class TreeStringSet {
+    friend ostream& operator<<(ostream& os, const TreeStringSet& t);
  private:
+    /**
+    * Node
+    *
+    * A Node is part of the tree,
+    *   hold a string value and the size of the subtree below it,
+    *   as well as pointers to its children nodes
+    */
+    struct Node {
+
+        // Data Members
+        string value_;
+        Node* left_;
+        Node* right_;
+        size_t size_;
+
+        Node(string value);
+        ~Node();
+        // Disable default constructor, copy constructor,
+        //  and assignment operator
+        Node() = delete;
+        Node& operator=(const Node& rhs) = delete;
+        Node(const Node& other) = delete;
+
+        /**
+        * print()
+        * \brief prints a tree rooted at a node
+        * \param o an ostream reference
+        * \returns an ostream reference
+        */
+        ostream& print(ostream& o) const;
+
+        /**
+        * heightHelper
+        * \brief a helper function for height (allows recursion),
+        *        looks through the subtrees to calculate max height
+        * \returns the height of the node it is called on
+        */
+        int heightHelper() const;
+
+        /**
+        * totalDepth
+        * \brief a helper function for averageDepth (allows recursion),
+        *        calculates the total depth of each node's, starting at the node it's called on
+        * \param level is the depth of the node the function is called on
+        * \returns the total depth of the subtree with the root it's called on
+        */
+        int totalDepth(int level) const;
+    };
+
     // Data Members
     Node* root_;
     treetype type_;
     size_t size_;
-    RandUint32 rand;
+    RandUInt32 rand;
 
     // Member Functions
 
@@ -38,7 +90,7 @@ class TreeStringSet {
     * \param root a pointer to the root of the tree to be inserted into
     * \param value a reference to the string value of our new Node
     */
-    void insertAtLeafNode(Node* root, const string& value);
+    void insertAtLeafNode(Node*& root, const string& value);
 
     /**
     * insertAtRoot
@@ -46,7 +98,7 @@ class TreeStringSet {
     * \param root a pointer to the root of the tree to be inserted into
     * \param value a reference to the string value of our new Node
     */
-    void insertAtRoot(Node* root, const string& value);
+    void insertAtRoot(Node*& root, const string& value);
 
     /**
     * insertAtRandom
@@ -54,7 +106,7 @@ class TreeStringSet {
     * \param root a pointer to the root of the tree to be inserted into
     * \param value a reference to the string value of our new Node
     */
-    void insertAtRandom(Node* root, const string& value);
+    void insertAtRandom(Node*& root, const string& value);
 
     /**
     * rotateRight
@@ -78,47 +130,6 @@ class TreeStringSet {
     * \param value the string that we are looking for
     */
     bool existsHelper(Node* root, const string& value) const;
-
-
-    /**
-    * Node
-    *
-    * A Node is part of the tree,
-    *   hold a string value and the size of the subtree below it,
-    *   as well as pointers to its children nodes
-    */
-    struct Node {
-        // Data Members
-        string value_;
-        Node* left_;
-        Node* right_;
-        size_t size_;
-
-        Node(string value);
-        ~Node();
-        // Disable default constructor, copy constructor,
-        //  and assignment operator
-        Node() = delete;
-        Node& operator=(const Node& rhs) = delete;
-        Node(const Node& other) = delete;
-
-        /**
-        * heightHelper
-        * \brief a helper function for height (allows recursion),
-        *        looks through the subtrees to calculate max height
-        * \returns the height of the node it is called on
-        */
-        int heightHelper() const;
-
-        /**
-        * totalDepth
-        * \brief a helper function for averageDepth (allows recursion),
-        *        calculates the total depth of each node's, starting at the node it's called on
-        * \param level is the depth of the node the function is called on
-        * \returns the total depth of the subtree with the root it's called on
-        */
-        int totalDepth(int level) const;
-    }
 
     /**
     * Iterator 
@@ -184,7 +195,7 @@ class TreeStringSet {
         * \returns a reference to our iterator
         */
         Iterator& operator++();
-    }
+    };
 
  public:
     // Provide our own destructor and parametrized constructors
@@ -243,6 +254,14 @@ class TreeStringSet {
     bool exists(const string& value) const;
 
     /**
+    * print()
+    * \brief prints a tree
+    * \param o an ostream reference
+    * \returns an ostream reference
+    */
+    ostream& print(ostream& o) const;
+
+    /**
     * height()
     * \brief returns the height of the tree using a helper function
     * \returns the height of the tree
@@ -278,14 +297,7 @@ class TreeStringSet {
     * \returns the default iterator
     */
     iterator end() const;
-}
-/**
-* print()
-* \brief prints a tree
-* \param o an ostream reference
-* \returns an ostream reference
-*/
-ostream& TreeStringSet::print(ostream& o);
+};
 
 /**
 * operator<<()
@@ -295,22 +307,5 @@ ostream& TreeStringSet::print(ostream& o);
 * \returns an ostream reference
 */
 ostream& operator<<(ostream& o, const TreeStringSet& t);
-
-/**
-* print()
-* \brief prints a tree rooted at a node
-* \param o an ostream reference
-* \returns an ostream reference
-*/
-ostream& TreeStringSet::Node::print(ostream& o);
-
-/**
-* operator<<()
-* \brief adds the representation of the tree rooted at a node to the ostream
-* \param o an ostream reference
-* \param t the root of the tree to add
-* \returns an ostream reference
-*/
-ostream& operator<<(ostream& o, const Node& t);
 
 #endif
