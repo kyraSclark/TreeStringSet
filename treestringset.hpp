@@ -26,6 +26,7 @@ enum treetype { LEAF, ROOT, RANDOMIZED };
 */
 class TreeStringSet {
     friend ostream& operator<<(ostream& os, const TreeStringSet& t);
+
  private:
     /**
     * Node
@@ -35,9 +36,10 @@ class TreeStringSet {
     *   as well as pointers to its children nodes
     */
     struct Node {
-
         // Data Members
         string value_;
+        // Pointers to the Node's left and right
+        //  children nodes, acting as subtrees
         Node* left_;
         Node* right_;
         size_t size_;
@@ -57,23 +59,6 @@ class TreeStringSet {
         * \returns an ostream reference
         */
         ostream& print(ostream& o) const;
-
-        /**
-        * heightHelper
-        * \brief a helper function for height (allows recursion),
-        *        looks through the subtrees to calculate max height
-        * \returns the height of the node it is called on
-        */
-        int heightHelper() const;
-
-        /**
-        * totalDepth
-        * \brief a helper function for averageDepth (allows recursion),
-        *        calculates the total depth of each node's, starting at the node it's called on
-        * \param level is the depth of the node the function is called on
-        * \returns the total depth of the subtree with the root it's called on
-        */
-        int totalDepth(int level) const;
     };
 
     // Data Members
@@ -113,14 +98,14 @@ class TreeStringSet {
     * \brief a helper function for insertAtRoot, rotates the tree right about the root
     * \param root a pointer to the root of the tree to rotate around
     */
-    void rotateRight(Node* root);
+    void rotateRight(Node*& root);
 
     /**
     * rotateLeft
     * \brief a helper function for insertAtRoot, rotates the tree left about the root
     * \param root a pointer to the root of the tree to rotate around
     */
-    void rotateLeft(Node* root);
+    void rotateLeft(Node*& root);
 
     /**
     * existsHelper
@@ -152,10 +137,13 @@ class TreeStringSet {
 
         // Provide usual operations for a forward iterator
 
-        Iterator();
+        Iterator() = default;
         Iterator(Node* current);
-        ~Iterator();
+
+        ~Iterator() = default;
+
         Iterator& operator=(const Iterator& other) = default;
+        Iterator(const Iterator& other) = default;
 
         /**
         * operator==
@@ -269,17 +257,42 @@ class TreeStringSet {
     int height() const;
 
     /**
+    * heightHelper
+    * \brief a helper function for height (allows recursion),
+    *        looks through the subtrees to calculate max height
+    * \param root a pointer to the root of the subtree we want
+    *              to find the height of
+    * \returns the height of the node it is called on
+    */
+    int heightHelper(const Node* root) const;
+
+    /**
     * averageDepth()
     * \brief returns the average depth of nodes in the tree using a helper function
     * \returns the average depth of nodes in the tree
+    * \details We are assuming a tree of height 0, has a depth of 0;
+    *            an empty tree has a depth of 0;
+    *            a tree of height 2 has a depth of 1, etc.
     */
     double averageDepth() const;
 
     /**
-    * averageDepth()
-    * \brief displays the height, size, and the average depth of the tree.
+    * totalDepth
+    * \brief a helper function for averageDepth (allows recursion),
+    *        calculates the total depth of each node's, starting at the node it's called on
+    * \param root a pointer to the root of the subtree to find the depth of
+    * \param level is the depth of the node the function is called on
+    * \returns the total depth of the subtree with the root it's called on
     */
-    void showStats() const;
+    int totalDepth(const Node* root, int level) const;
+
+    /**
+    * showStats()
+    * \brief displays the height, size, and the average depth of the tree.
+    * \param o an ostream reference
+    * \returns an ostream reference with information about the tree
+    */
+    ostream& showStatistics(ostream& o) const;
 
     // allow clients to iterate over the contents of a tree
     using iterator = Iterator;
