@@ -6,8 +6,8 @@ all: treestringset-test
 treestringset-test: treestringset-test.o treestringset.o
 	$(CXX) -o treestringset-test treestringset-test.o treestringset.o -lranduint32 -ltestinglogger
 
-treestringset-test.o: treestringset-test.cpp treestringset.cpp treestringset.hpp
-	$(CXX) $(CXXFLAGS) -c treestringset-test.cpp treestringset.cpp
+treestringset-test.o: treestringset-test.cpp treestringset.hpp
+	$(CXX) $(CXXFLAGS) -c treestringset-test.cpp
 
 treestringset.o: treestringset.cpp treestringset.hpp
 	$(CXX) $(CXXFLAGS) -c treestringset.cpp
