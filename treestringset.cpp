@@ -276,8 +276,7 @@ double TreeStringSet::averageDepth() const {
     if (size() == 0) {
         return 0;
     } else {
-        // We're trying this, but it probably should be size()
-        return totalDepth(root_, 0) / (size()+1);
+        return totalDepth(root_, 0) / size();
     }
 }
 

@@ -242,8 +242,8 @@ bool part7Test() {
     tree1.showStatistics(ss);
     affirm(tree1.size() == 0);
     affirm(tree1.height() == -1);
-    // double expectedDepth = 0.0;
-    // affirm(tree1.averageDepth() == expectedDepth);
+    double expectedDepth = 0.0;
+    affirm(tree1.averageDepth() == expectedDepth);
 
     tree1.insert("a");
     affirm(tree1.size() == 1);
