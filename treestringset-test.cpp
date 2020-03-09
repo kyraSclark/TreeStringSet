@@ -10,7 +10,7 @@
 #include <string>
 #include <queue>
 #include <cs70/testinglogger.hpp>
-#include "treeStringSet.hpp"
+#include "treestringset.hpp"
 
 using namespace std;
 
